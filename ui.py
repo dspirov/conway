@@ -1,6 +1,7 @@
 import pygame
 from vec2d import Vec2D
 import game
+import math
 
 
 class GridDisplay:
@@ -8,10 +9,12 @@ class GridDisplay:
 
     def __init__(self, game):
         pygame.init()
-        self.screen = pygame.display.set_mode((640, 480))
+        window_size = (640, 480)
+        self.screen = pygame.display.set_mode(window_size)
         self.clock = pygame.time.Clock()
         self.square_size = 10
         self.offset = Vec2D(0, 0)
+        self.window_center = Vec2D(*window_size) * 0.5
 
         self.fps = 30
         self.game = game
@@ -28,10 +31,19 @@ class GridDisplay:
                     self.offset += Vec2D(*event.dict['rel']) * (1 / self.square_size)
 
                 elif event.type == pygame.MOUSEBUTTONUP:
-                    if event.dict['button'] == 4:
+                    if event.dict['button'] is 4:
                         self.square_size += 1
-                    elif event.dict['button'] == 5 and self.square_size > 1:
+                    elif event.dict['button'] is 5 and self.square_size > 1:
                         self.square_size -= 1
+                    elif event.dict['button'] is 3:
+                        coords = Vec2D(*event.dict['pos']) - self.window_center
+                        coords *= 1/self.square_size
+                        coords -= self.offset
+                        coords = (math.floor(coords.x), math.floor(coords.y))
+                        if self.game.grid.is_alive(coords):
+                            self.game.grid.kill(coords)
+                        else:
+                            self.game.grid.live(coords)
 
                 elif event.type == pygame.KEYDOWN:
                     if event.dict['key'] == pygame.K_SPACE:
@@ -49,8 +61,8 @@ class GridDisplay:
         self.screen.fill((255, 255, 255))
 
         for c in self.game.grid.live_cells:
-            square_offset = (self.offset + Vec2D(*c)) * self.square_size
-            coords = (square_offset.x + 320, square_offset.y + 240,
+            square_offset = (self.offset + Vec2D(*c)) * self.square_size + self.window_center
+            coords = (square_offset.x, square_offset.y,
                       self.square_size, self.square_size)
             pygame.draw.rect(self.screen, (100, 100, 100), coords, 0)  # fill
             pygame.draw.rect(self.screen, (0, 0, 0), coords, 1)  # border
