@@ -1,18 +1,15 @@
-from grid import Grid
-
-
 class Game:
     rule_lonely = 2
     rule_crowded = 3
     rule_reproduce = 3
 
-    def __init__(self):
-        self.grid = Grid()
+    def __init__(self, grid):
+        self.grid = grid
 
     def step(self):
-        new_grid = Grid()
-        cells_to_check = self.grid.live_cells
-        for cell in self.grid.live_cells:
+        new_grid = self.grid.empty_copy()
+        cells_to_check = self.grid.get_live_cells()
+        for cell in self.grid.get_live_cells():
             cells_to_check = cells_to_check.union(self.grid.get_neighbors(cell))
 
         for cell in cells_to_check:

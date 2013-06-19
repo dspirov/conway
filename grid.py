@@ -10,6 +10,9 @@ class Grid:
 
     def is_alive(self, coords):
         return coords in self.live_cells
+    
+    def get_live_cells(self):
+        return self.live_cells
 
     def get_neighbors(self, coords):
         x, y = coords
@@ -19,3 +22,38 @@ class Grid:
 
     def count_live_neighbors(self, coords):
         return sum(map(self.is_alive, self.get_neighbors(coords)))
+
+    def empty_copy(self):
+        return Grid()
+
+
+class ToroidalGrid(Grid):
+    def __init__(self, size):
+        self.data = [[False for x in range(0, size[0])] for y in range(0, size[1])]
+        self.size = size
+
+    def live(self, coords):
+        coords = self.fix_coords(coords)
+        self.data[coords[1]][coords[0]] = True
+
+    def kill(self, coords):
+        coords = self.fix_coords(coords)
+        self.data[coords[1]][coords[0]] = False
+    
+    def is_alive(self, coords):
+        coords = self.fix_coords(coords)
+        return self.data[coords[1]][coords[0]]
+
+    def fix_coords(self, coords):
+        return (coords[0] % self.size[0], coords[1] % self.size[1])
+    
+    def get_live_cells(self):
+        result = []
+        for y in range(0, self.size[1]):
+            for x in range(0, self.size[0]):
+                if self.data[x][y]:
+                    result.append((x,y))
+        return set(result)
+
+    def empty_copy(self):
+        return ToroidalGrid(self.size)

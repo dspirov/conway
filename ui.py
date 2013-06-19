@@ -60,7 +60,7 @@ class GridDisplay:
     def draw(self):
         self.screen.fill((255, 255, 255))
 
-        for c in self.game.grid.live_cells:
+        for c in self.game.grid.get_live_cells():
             square_offset = (self.offset + Vec2D(*c)) * self.square_size + self.window_center
             coords = (square_offset.x, square_offset.y,
                       self.square_size, self.square_size)
@@ -71,7 +71,8 @@ class GridDisplay:
 
 
 if __name__ == "__main__":
-    g = game.Game()
+    import grid
+    g = game.Game(grid.Grid())
     g.grid.live((2, 2))
     g.grid.live((2, 4))
     g.grid.live((3, 3))
