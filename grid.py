@@ -10,7 +10,7 @@ class Grid:
 
     def is_alive(self, coords):
         return coords in self.live_cells
-    
+
     def get_live_cells(self):
         return self.live_cells
 
@@ -27,9 +27,18 @@ class Grid:
         return Grid()
 
 
+class HexGrid(Grid):
+    def get_neighbors(self, coords):
+        x, y = coords
+        return [(x, y - 1), (x + 1, y - 1),
+                (x - 1, y), (x + 1, y),
+                (x - 1, y + 1), (x, y + 1)]
+
+
 class ToroidalGrid(Grid):
     def __init__(self, size):
-        self.data = [[False for x in range(0, size[0])] for y in range(0, size[1])]
+        self.data = [[False for x in range(0, size[0])]
+                     for y in range(0, size[1])]
         self.size = size
 
     def live(self, coords):
@@ -39,20 +48,20 @@ class ToroidalGrid(Grid):
     def kill(self, coords):
         coords = self.fix_coords(coords)
         self.data[coords[1]][coords[0]] = False
-    
+
     def is_alive(self, coords):
         coords = self.fix_coords(coords)
         return self.data[coords[1]][coords[0]]
 
     def fix_coords(self, coords):
         return (coords[0] % self.size[0], coords[1] % self.size[1])
-    
+
     def get_live_cells(self):
         result = []
         for y in range(0, self.size[1]):
             for x in range(0, self.size[0]):
                 if self.data[x][y]:
-                    result.append((x,y))
+                    result.append((x, y))
         return set(result)
 
     def empty_copy(self):
