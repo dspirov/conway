@@ -29,17 +29,3 @@ class Game:
     def get_region(self, x_offset, y_offset, x_len, y_len):
         return [[self.grid.is_alive((x, y)) for x in range(x_offset, x_len)]
                 for y in range(y_offset, y_len)]
-
-import time
-if __name__ == "__main__":
-    g = Game()
-    g.grid.live((2, 2))
-    g.grid.live((2, 4))
-    g.grid.live((3, 3))
-    g.grid.live((3, 4))
-    g.grid.live((4, 3))
-    while True:
-        for row in g.get_region(0, 0, 10, 10):
-            print(' '.join(map(lambda c: [' ', 'x'][int(c)], row)))
-        g.step()
-        time.sleep(0.5)
