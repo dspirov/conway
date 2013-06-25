@@ -60,7 +60,7 @@ class ToroidalGrid(Grid):
         result = []
         for y in range(0, self.size[1]):
             for x in range(0, self.size[0]):
-                if self.data[x][y]:
+                if self.data[y][x]:
                     result.append((x, y))
         return set(result)
 
