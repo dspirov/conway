@@ -1,7 +1,6 @@
 class Game:
-    rule_lonely = 2
-    rule_crowded = 3
-    rule_reproduce = 3
+    rule_survive = [2, 3]
+    rule_reproduce = [3]
 
     def __init__(self, grid):
         self.grid = grid
@@ -15,10 +14,10 @@ class Game:
         for cell in cells_to_check:
             count = self.grid.count_live_neighbors(cell)
             if self.grid.is_alive(cell):
-                if count >= self.rule_lonely and count <= self.rule_crowded:
+                if count in self.rule_survive:
                     new_grid.live(cell)
             else:
-                if count == self.rule_reproduce:
+                if count in self.rule_reproduce:
                     new_grid.live(cell)
 
         self.grid = new_grid

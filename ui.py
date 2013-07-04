@@ -68,15 +68,3 @@ class GridDisplay:
             pygame.draw.rect(self.screen, (0, 0, 0), coords, 1)  # border
 
         pygame.display.flip()
-
-
-if __name__ == "__main__":
-    import grid
-    g = game.Game(grid.Grid())
-    g.grid.live((2, 2))
-    g.grid.live((2, 4))
-    g.grid.live((3, 3))
-    g.grid.live((3, 4))
-    g.grid.live((4, 3))
-    d = GridDisplay(g)
-    d.main()
