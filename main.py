@@ -7,11 +7,11 @@ import re
 
 g = None
 if len(sys.argv) > 1:
-    if sys.argv[1] is 'open':
+    if sys.argv[1] == 'open':
         if sys.argv[2] in ['list', 'life1.06']:
-            file = files.ListFile(sys.argv[1])
+            file = files.ListFile(sys.argv[3])
         elif sys.argv[2] in ['life', 'life1.05']:
-            file = files.LifeFile(sys.argv[1])
+            file = files.LifeFile(sys.argv[3])
         else:
             print('Please specify file type!')
         g = file.load()
