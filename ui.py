@@ -55,6 +55,10 @@ class GridDisplay:
                         if not self.running:
                             self.next_grid_step = pygame.time.get_ticks()
                         self.running = not self.running
+                    if event.dict['key'] in [pygame.K_PLUS, pygame.K_KP_PLUS]:
+                        self.speedUp()
+                    if event.dict['key'] in [pygame.K_MINUS, pygame.K_KP_MINUS]:
+                        self.slowDown()
 
             self.clock.tick(self.fps)
             self.draw()
@@ -96,3 +100,9 @@ class GridDisplay:
                 pygame.draw.polygon(self.screen, border_color, coords, 1)
 
         pygame.display.flip()
+
+    def speedUp(self):
+        self.grid_freq *= 1.4
+
+    def slowDown(self):
+        self.grid_freq /= 1.4
