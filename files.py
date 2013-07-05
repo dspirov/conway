@@ -36,3 +36,29 @@ class ListFile(GameFile):
                 elif not re.match(r'^#|^\s*$', line):
                     print('bad line: ' + line)
             return result
+
+
+class LifeFile(GameFile):
+    def save(self, game):
+        with open(self.filename, mode='w') as file:
+            limits = game.grid.get_limits()
+            file.write('#Life 1.05\n')
+            for y in range(limits['min_y'], limits['max_y'] + 1):
+                for x in range(limits['min_x'], limits['max_x'] + 1):
+                    file.write('*' if game.grid.is_alive((x, y)) else '.')
+                file.write('\n')
+
+    def load(self):
+        with open(self.filename, mode='r') as file:
+            result = game.Game(grid.Grid())
+            line_number = 0
+            for line in file:
+                if line[0] == '#':
+                    continue
+                line_number += 1
+                col_number = 0
+                for char in line:
+                    col_number += 1
+                    if char == '*':
+                        result.grid.live((col_number, line_number))
+            return result

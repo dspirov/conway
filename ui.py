@@ -74,7 +74,7 @@ class GridDisplay:
             for c in self.game.grid.get_live_cells():
                 square_offset = (self.offset + Vec2D(*c)) * self.square_size + self.window_center
                 coords = (square_offset.x, square_offset.y,
-                        self.square_size, self.square_size)
+                          self.square_size, self.square_size)
                 pygame.draw.rect(self.screen, fill_color, coords, 0)
                 pygame.draw.rect(self.screen, border_color, coords, 1)
         else:
@@ -84,7 +84,7 @@ class GridDisplay:
                       Vec2D(0, -1),
                       Vec2D(-math.cos(math.pi/6), -math.sin(math.pi/6)),
                       Vec2D(-math.cos(math.pi/6), math.sin(math.pi/6))]
-                      
+
             for c in self.game.grid.get_live_cells():
                 hex_center = Vec2D(c[0] + math.cos(math.pi/3) * c[1],
                                    math.sin(math.pi/3) * c[1])

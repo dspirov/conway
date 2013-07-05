@@ -23,6 +23,17 @@ class Grid:
     def count_live_neighbors(self, coords):
         return sum(map(self.is_alive, self.get_neighbors(coords)))
 
+    def get_limits(self):
+        xs = list(map(lambda c: c[0], self.live_cells))
+        ys = list(map(lambda c: c[1], self.live_cells))
+        if not self.live_cells:
+            xs = [0]
+            ys = [0]
+        return {'min_x': min(xs),
+                'max_x': max(xs),
+                'min_y': min(ys),
+                'max_y': max(ys)}
+
     def empty_copy(self):
         return Grid()
 
@@ -66,6 +77,12 @@ class ToroidalGrid(Grid):
                 if self.data[y][x]:
                     result.append((x, y))
         return set(result)
+
+    def get_limits(self):
+        return {'min_x': 0,
+                'max_x': self.size[0],
+                'min_y': 0,
+                'max_y': self.size[1]}
 
     def empty_copy(self):
         return ToroidalGrid(self.size)
