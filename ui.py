@@ -59,12 +59,32 @@ class GridDisplay:
 
     def draw(self):
         self.screen.fill((255, 255, 255))
+        fill_color = (100, 100, 100)
+        border_color = (0, 0, 0)
 
-        for c in self.game.grid.get_live_cells():
-            square_offset = (self.offset + Vec2D(*c)) * self.square_size + self.window_center
-            coords = (square_offset.x, square_offset.y,
-                      self.square_size, self.square_size)
-            pygame.draw.rect(self.screen, (100, 100, 100), coords, 0)  # fill
-            pygame.draw.rect(self.screen, (0, 0, 0), coords, 1)  # border
+        if self.game.grid.__class__.__name__ is not 'HexGrid':
+            for c in self.game.grid.get_live_cells():
+                square_offset = (self.offset + Vec2D(*c)) * self.square_size + self.window_center
+                coords = (square_offset.x, square_offset.y,
+                        self.square_size, self.square_size)
+                pygame.draw.rect(self.screen, fill_color, coords, 0)
+                pygame.draw.rect(self.screen, border_color, coords, 1)
+        else:
+            points = [Vec2D(0, 1),
+                      Vec2D(math.cos(math.pi/6), math.sin(math.pi/6)),
+                      Vec2D(math.cos(math.pi/6), -math.sin(math.pi/6)),
+                      Vec2D(0, -1),
+                      Vec2D(-math.cos(math.pi/6), -math.sin(math.pi/6)),
+                      Vec2D(-math.cos(math.pi/6), math.sin(math.pi/6))]
+                      
+            for c in self.game.grid.get_live_cells():
+                hex_center = Vec2D(c[0] + math.cos(math.pi/3) * c[1],
+                                   math.sin(math.pi/3) * c[1])
+                hex_center = (hex_center + self.offset) * self.square_size + self.window_center
+                coords = []
+                for p in points:
+                    coords.append(tuple(p * (self.square_size / 2) + hex_center))
+                pygame.draw.polygon(self.screen, fill_color, coords, 0)
+                pygame.draw.polygon(self.screen, border_color, coords, 1)
 
         pygame.display.flip()

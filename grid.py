@@ -34,6 +34,9 @@ class HexGrid(Grid):
                 (x - 1, y), (x + 1, y),
                 (x - 1, y + 1), (x, y + 1)]
 
+    def empty_copy(self):
+        return HexGrid()
+
 
 class ToroidalGrid(Grid):
     def __init__(self, size):
