@@ -76,23 +76,24 @@ class GridDisplay:
 
         if not self.is_hex():
             for c in self.game.grid.get_live_cells():
-                square_offset = (self.offset + Vec2D(*c)) * self.square_size + self.window_center
+                square_offset = (self.offset + Vec2D(*c)) \
+                    * self.square_size \
+                    + self.window_center
                 coords = (square_offset.x, square_offset.y,
                           self.square_size, self.square_size)
                 pygame.draw.rect(self.screen, fill_color, coords, 0)
                 pygame.draw.rect(self.screen, border_color, coords, 1)
         else:
-            points = [Vec2D(0, 1),
-                      Vec2D(math.cos(math.pi/6), math.sin(math.pi/6)),
-                      Vec2D(math.cos(math.pi/6), -math.sin(math.pi/6)),
-                      Vec2D(0, -1),
-                      Vec2D(-math.cos(math.pi/6), -math.sin(math.pi/6)),
-                      Vec2D(-math.cos(math.pi/6), math.sin(math.pi/6))]
+            points = list(map(lambda i: Vec2D(math.sin(i * math.pi / 3),
+                                              math.cos(i * math.pi / 3)),
+                          range(0, 6)))
 
             for c in self.game.grid.get_live_cells():
                 hex_center = Vec2D(c[0] + math.cos(math.pi/3) * c[1],
                                    math.sin(math.pi/3) * c[1])
-                hex_center = (hex_center + self.offset) * self.square_size + self.window_center
+                hex_center = (hex_center + self.offset) \
+                    * self.square_size \
+                    + self.window_center
                 coords = []
                 for p in points:
                     coords.append(tuple(p * (self.square_size / 2) + hex_center))
