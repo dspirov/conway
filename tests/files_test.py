@@ -28,6 +28,16 @@ class FilesTest(unittest.TestCase):
         self.assertEqual(g.grid.get_live_cells(),
                          {(2, 2), (2, 4), (3, 3), (3, 4), (4, 3)})
 
+    def test_list_rule(self):
+        file = files.ListFile('examples/rule.txt')
+        g = file.load()
+        self.assertEqual(g.get_rules(), ([1, 2, 3, 4], [0, 1, 2, 3, 4, 5, 7]))
+
+    def test_list_hex(self):
+        file = files.ListFile('examples/hex.txt')
+        g = file.load()
+        self.assertIsInstance(g.grid, grid.HexGrid)
+
     def test_list_save(self):
         self.tmp_list.save(self.game)
         with open(self.tmp_list.filename) as file:
