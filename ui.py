@@ -6,6 +6,7 @@ import math
 
 class GridDisplay:
     running = True
+    save_call = None
 
     def __init__(self, game):
         pygame.init()
@@ -25,6 +26,7 @@ class GridDisplay:
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    pygame.quit()
                     return
 
                 elif event.type == pygame.MOUSEMOTION and event.dict['buttons'][0]:
@@ -59,6 +61,8 @@ class GridDisplay:
                         self.speedUp()
                     if event.dict['key'] in [pygame.K_MINUS, pygame.K_KP_MINUS]:
                         self.slowDown()
+                    if self.save_call and event.dict['key'] == pygame.K_s:
+                        self.save_call(self)
 
             self.clock.tick(self.fps)
             self.draw()
