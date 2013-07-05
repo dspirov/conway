@@ -39,7 +39,12 @@ class GridDisplay:
                         coords = Vec2D(*event.dict['pos']) - self.window_center
                         coords *= 1/self.square_size
                         coords -= self.offset
-                        coords = (math.floor(coords.x), math.floor(coords.y))
+                        if self.is_hex():
+                            coords = Vec2D(coords.x - coords.y / math.tan(math.pi / 3),
+                                           coords.y / math.sin(math.pi / 3))
+                            coords = (round(coords.x), round(coords.y))
+                        else:
+                            coords = (math.floor(coords.x), math.floor(coords.y))
                         if self.game.grid.is_alive(coords):
                             self.game.grid.kill(coords)
                         else:
@@ -57,12 +62,15 @@ class GridDisplay:
                 self.next_grid_step += 1000 / self.grid_freq
                 self.game.step()
 
+    def is_hex(self):
+        return self.game.grid.__class__.__name__ is 'HexGrid'
+
     def draw(self):
         self.screen.fill((255, 255, 255))
         fill_color = (100, 100, 100)
         border_color = (0, 0, 0)
 
-        if self.game.grid.__class__.__name__ is not 'HexGrid':
+        if not self.is_hex():
             for c in self.game.grid.get_live_cells():
                 square_offset = (self.offset + Vec2D(*c)) * self.square_size + self.window_center
                 coords = (square_offset.x, square_offset.y,
