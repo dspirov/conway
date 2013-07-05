@@ -25,3 +25,10 @@ class Game:
     def get_region(self, x_offset, y_offset, x_len, y_len):
         return [[self.grid.is_alive((x, y)) for x in range(x_offset, x_len)]
                 for y in range(y_offset, y_len)]
+
+    def set_rules(self, born, survive):
+        self.rule_reproduce = list(born)
+        self.rule_survive = list(survive)
+
+    def get_rules(self):
+        return (self.rule_reproduce, self.rule_survive)
